@@ -4,8 +4,10 @@ import { doc, setDoc } from "firebase/firestore";
 import { useState } from "react";
 import { auth, db, storage } from "../firebase/Firebase.init";
 import Add from '../img/addAvatar.png'
+import { Link, useNavigate } from "react-router-dom";
 const Register = () => {
     const [error, setError] = useState(false)
+    const navigate = useNavigate()
     const handleSubmit = async (e) => {
         e.preventDefault()
         const displayName = e.target[0].value;
@@ -37,12 +39,16 @@ const Register = () => {
                             email,
                             photoURL: downloadURL
                         });
+
+                        await setDoc(doc(db, "userChats", res.user.uid), {})
+                        navigate('/')
+                        setError(false)
                     });
                 }
             );
 
 
-            setError(false)
+
         } catch (error) {
             setError(true)
         }
@@ -65,7 +71,7 @@ const Register = () => {
                         <button>Sign up</button>
                         {error && <span style={{ color: 'red', fontWeight: 'bold' }}>Something went to wrong</span>}
                     </form>
-                    <p>You do have an account? Login</p>
+                    <p>You do have an account?  <Link to={'/login'}>Login</Link></p>
                 </div>
             </div>
         </>
