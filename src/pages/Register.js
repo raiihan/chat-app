@@ -1,4 +1,3 @@
-import { async } from "@firebase/util";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { doc, setDoc } from "firebase/firestore";
@@ -20,9 +19,7 @@ const Register = () => {
             console.log(res);
 
             const storageRef = ref(storage, displayName);
-
             const uploadTask = uploadBytesResumable(storageRef, file);
-
             uploadTask.on(
                 (error) => {
                     setError(true)
@@ -34,7 +31,7 @@ const Register = () => {
                             photoURL: downloadURL
 
                         })
-                        await setDoc(doc(db, "user", res.user.uid), {
+                        await setDoc(doc(db, "users", res.user.uid), {
                             uid: res.user.uid,
                             displayName,
                             email,
